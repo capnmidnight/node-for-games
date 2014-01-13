@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Node.JS for Games: Chapter 2</title>
+        <script type="text/javascript"
+                src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+var socket, output;
+
+function echo(data) {
+    output.innerHTML += "\n" + data;
+}
+
+function ping() {
+    socket.emit("ping", "blah");
+}
+
+function setup() {
+    output = document.getElementById("output");
+    socket = io.connect(document.location.hostname);
+    socket.on("update", echo);
+    socket.on("pong", echo);
+}
+        </script>
+    </head>
+    <body onload="setup()">
+        <button onclick="ping()">Ping</button>
+        <pre id="output"></pre>
+    </body>
+</html>
