@@ -5,11 +5,13 @@ Today, we're going to jump feet first into Socket.IO: an library for Node.JS tha
 To start, we'll need a basic web server that can load static files and send them to the user. I'm jumping ahead here and assuming that I'm going to eventually want to serve up some HTML, CSS, client-side JavaScript, PNG, and MP3 files, considering the goal is to make a game here. That's a lot of different types of content, so I'm going to cheat and take a library someone else wrote for handling it: Mime. This will also give me a chance to show you what happens when you install a dependency through NPM.
 
 I'm going to make a new directory for a project, then install the Mime library through NPM. I'm making a new directory because NPM is going to download some files for me and I want it to stick them somewhere that won't junk up my harddrive. Installing the library is just simple "npm install mime" statement.
+
 <img src="node1.png">
 
 And there it goes. NPM knows where to download the code for Mime because someone registered Mime on the NPM website. The library gets copied to a directory called node_modules.
 
 Now, let's throw down some code into a text file:
+
 <img src="node2.png">
 
 I hope this is pretty clear on what it does. There is not a lot to cover. Probably the most surprising part of it is the http.createServer call. It's registering a callback function that will be called whenever an HTTP request is made to the server. In general, Node.JS does a lot of stuff through callbacks, to make up for its lack of multi-threading primitives of any type. It's basic HTTP from there. I save this to a file called "server.js" and run it with a simple "node server" (Node adds the ".js" file extension for me), I open my browser and head over the http://localhost:81/ and this is what I get:
@@ -19,9 +21,11 @@ File not found. / reason: {"errno":28,"code":"EISDIR"}
 ````
 
 Aaaah, yes, I didn't actually tell it what file I want. That's pretty easy to fix though. Let's kill the server with CTRL+C (webServer.listen will keep Node running until we explicitly kill it) and make the code default to loading an "index.html" file if the URL specified indicates it was a directory name.
+
 <img src="node3.png">
 
 I've also created a file named "index.html" that just contains the text "<em>Hello, world!</em>". Now, when I restart the server and load the page, I see this:
+
 <img src="node4.png">
 
 "But capn_midnight", you say, "Why don't we just use Express and weeooeeooeeeoooooo". Because we're making a Single-Page Application (SPA) that will have mostly static files for making an extremely basic front end, with most of the logic residing on the server side. If we need more out of our static content delivery than this, then we can figure that out later. Also, this article series isn't really about Node.JS or Socket.IO or Express or any thing in particular, it's about getting to make a multiplayer game very quickly.
@@ -35,6 +39,7 @@ But, if you don't want to put your files into a folder named "node_modules" (or 
 So in this particular case, I've moved my code to a file named "httpRequestHandler.js". I've put it in the same directory as my "server.js" file. So to import it, I must "require('./httpRequestHandler.js')" or "require('./httpRequestHandler')" for a little-bit shorter version.
 
 Anyway, now that we've had that little bit of a side-quest, back to the task at hand. I add code to my server.js file for creating a WebSockets listener. It's very simple. If you've done any sort of network programming before, I'm sure you'll be as flabbergasted as I was.
+
 <img src="node5.png">
 
 Look at that! It's all of four additional lines of code to listen, respond to new connections, and do some basic communication. In other words, it's one more freaking line of code than things we're freaking doing.
@@ -47,11 +52,13 @@ So what is going on here? Well, lines 5 and 6 get our web server going again, to
 * Line 12: And then, for this example, just to prove to the client that we heard it, we echo back a message.
 
 Finally, we need a little bit of UI code to provide a user a physical interface with which to interact with server:
+
 <img src="node6.png">
 
 By now, there shouldn't be anything surprising here. We using an HTML SCRIPT tag to import the Socket.IO library for the client side[3]. It specifies an object called "io" that has a method connect(). Connect takes an address and does all the handshaking necessary to establish a connection[4]. From there, it's exactly the same as wiring up the events and handlers as we did on the server side. *Exactly the same*. Networking code really can't get any simpler than this.
 
 Start it up, click the button a few times, and you should see this:
+
 <img src="node7.png">
 
 By this point, if you know HTML, CSS, and JavaScript already, you can be off to the races on making a multiplayer game with Node.JS and Socket.IO. But I'm not going to leave you out in the rain just yet. Next time[5], I'll show you a very simple chat program using what we've learned so far. And this very simple chat program will grow legs and eventually become a Multi-User Dungeon, or MUD for short.
